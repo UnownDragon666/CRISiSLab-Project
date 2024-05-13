@@ -1,7 +1,6 @@
 CRISiSLab Challenge
 Team members:
-Jayden Tolley-Beales, Macklyn Smith, Tanush Arra, and Idrees Munshi
-Maybe Jamie Birchler 🤷‍♂️
+Jayden Tolley-Beales, Macklyn Smith, Tanush Arra, and Idrees Munshi  Birchler Birchler
 Tsunami Sensor code
 
 

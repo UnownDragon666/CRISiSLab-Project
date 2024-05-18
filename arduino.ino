@@ -1,33 +1,61 @@
-//Arduino code (Using  button instead of barometer)
+#include <Wire.h>
+#include "SparkFun_LPS28DFW_Arduino_Library.h"
 
-// Define button pin
-const int buttonPin = 2;
-int height = 0; // Variable to store height value
-int direction = 1; // 1 for increasing, -1 for decreasing
+// Create a new sensor object
+LPS28DFW pressureSensor;
 
-void setup() {
-  pinMode(buttonPin, INPUT);
-  Serial.begin(9600); // Start serial communication
-}
+// I2C address selection
+uint8_t i2cAddress = LPS28DFW_I2C_ADDRESS_DEFAULT; // 0x5C
+//uint8_t i2cAddress = LPS28DFW_I2C_ADDRESS_SECONDARY; // 0x5D
 
-void loop() {
-  // Read the state of the button
-  int buttonState = digitalRead(buttonPin);
+void setup()
+{
+    int airPressure;
+    int waterDensity;
+    const EARTHGRAVITY = 9.81;
+    float waterHeight;
+    float waterPressure;
+    float totalPressure;
 
-  // Check if the button is pressed
-  if (buttonState == HIGH) {
-    // Increase or decrease height based on direction
-    height += direction;
-    
-    // If height reaches 100 or 0, change direction
-    if (height >= 100 || height <= 0) {
-      direction *= -1; // Reverse direction
+
+    // Start serial
+    Serial.begin(115200);
+    Serial.println("LPS28DFW Example 1 - Basic Readings!");
+
+    // Initialize the I2C library
+    Wire.begin();
+
+    // Check if sensor is connected and initialize
+    // Address is optional (defaults to 0x5C)
+    while(pressureSensor.begin(i2cAddress) != LPS28DFW_OK)
+    {
+        // Not connected, inform user
+        Serial.println("Error: LPS28DFW not connected, check wiring and I2C address!");
+
+        // Wait a bit to see if connection is established
+        delay(1000);
     }
 
-    // Send height value to the Node.js server
-    Serial.println(height);
+    Serial.println("LPS28DFW connected!");
+}
 
-    // Delay to debounce button press
-    delay(100);
-  }
+void loop()
+{
+    // Get measurements from the sensor. This must be called before accessing
+    // the pressure data, otherwise it will never update
+    pressureSensor.getSensorData();
+
+    totalPressure = pressureSensor.data.pressure.hpa * 100;
+    totalPressure - airPressure = waterPressure;
+    waterHeight = waterPressure / (waterDensity * EARTHGRAVITY);
+
+    // Print temperature and pressure
+    Serial.print("Temperature (C): ");
+    Serial.print(pressureSensor.data.heat.deg_c);
+    Serial.print("\t\t");
+    Serial.print("Pressure (hPa): ");
+    Serial.println(pressureSensor.data.pressure.hpa);
+
+    // Only print every second
+    delay(1000);
 }

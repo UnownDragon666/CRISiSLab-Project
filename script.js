@@ -1,4 +1,4 @@
-/*** Atempt at using plot.js to grpah a counter ***/
+/*** Atempt at using plot.js to grpah a counter (Doesn't Work Yet) ***/
   // Initial plot data
   var trace1 = {
     x: [],

@@ -4,4 +4,9 @@ Jayden Tolley-Beales, Macklyn Smith, Tanush Arra, and Idrees Munshi  Birchler Bi
 Tsunami Sensor code
 
 
-Mac and Tanush will use Visual Studio code.
+Mac and Tanush will use Visual Studio code and the Arduino IDE.
+Other Things:
+Node JS
+Microsoft PowerPoint
+Google Docs
+Github

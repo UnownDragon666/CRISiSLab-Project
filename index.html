@@ -3,12 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Real-time Plot</title>
-    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <title>Arduino Data Display</title>
     <script src="/socket.io/socket.io.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.plot.ly/plotly-2.32.0.min.js"></script>
+    <script src="script.js" defer></script>
 </head>
 <body>
-    <div id="myDiv" style="width: 100%; height: 600px;"></div>
-    <div id="data"></div>
+    <div id="myDiv"></div>
+    <div id="data">Waiting for data...</div>
 </body>
 </html>

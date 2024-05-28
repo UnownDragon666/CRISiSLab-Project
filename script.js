@@ -1,61 +1,67 @@
-/*** Atempt at using plot.js to grpah a counter (Doesn't Work Yet) ***/
-  // Initial plot data
-  var trace1 = {
-    x: [],
-    y: [],
-    type: 'scatter',
-    mode: 'lines+markers',
-    name: 'Sensor 1'
-};
+document.addEventListener('DOMContentLoaded', function() {
+    var trace = {
+        x: [],
+        y: [],
+        mode: 'lines+markers',
+        line: {shape: 'linear', color: '#ffffff'},
+        marker: {color: '#00ffff'}
+    };
 
-var trace2 = {
-    x: [],
-    y: [],
-    type: 'scatter',
-    mode: 'lines+markers',
-    name: 'Sensor 2'
-};
+    var layout = {
+        title: 'Sea Themed Linear Animated Graph',
+        xaxis: {
+            range: [0.0, 10.0],
+            title: 'Time (s)',
+            color: '#ffffff',
+            showgrid: true,
+            gridcolor: '#ffffff',
+            zeroline: true,
+            zerolinecolor: '#ffffff'
+        },
+        yaxis: {
+            range: [0, 12],
+            title: 'Water Height',
+            color: '#ffffff',
+            showgrid: true,
+            gridcolor: '#ffffff',
+            zeroline: true,
+            zerolinecolor: '#ffffff'
+        },
+        paper_bgcolor: 'rgba(0, 0, 0, 0.3)',
+        plot_bgcolor: 'rgba(0, 0, 0, 0.3)',
+        font: {
+            color: '#ffffff'
+        }
+    };
 
-var data = [trace1, trace2];
+    var data = [trace];
 
-// Initial plot
-Plotly.newPlot('myDiv', data);
+    Plotly.newPlot('graph', data, layout);
 
-// Set up Socket.io
-const socket = io();
+    var socket = io();
 
-let startTime = null;
-const maxPoints = 100; // Number of points to display
+    socket.on('data', function(msg) {
+        var counter = msg.x;
 
-// Handle incoming data
-socket.on('arduino-data', (newData) => {
-    console.log('Received data:', newData);
-    document.getElementById('data').textContent = `Counter: ${newData.x}`;
+        var yValue = counter + 1;
 
-    // Initialize start time
-    if (!startTime) {
-        startTime = new Date(newData.timestamp);
-    }
+        Plotly.extendTraces('graph', {
+            x: [[counter]],
+            y: [[yValue]]
+        }, [0]);
 
-    // Calculate elapsed time in seconds
-    var currentTime = new Date(newData.timestamp);
-    var elapsedTime = (currentTime - startTime) / 1000; // in seconds
+        var xRangeStart = Math.max(0, counter - 10);
+        var yRangeStart = Math.max(0, yValue - 10);
+        var update = {
+            xaxis: {
+                range: [xRangeStart, counter]
+            },
+            yaxis: {
+                range: [yRangeStart, yValue + 2]
+            }
+        };
 
-    // Update plot data
-    data[0].x.push(elapsedTime);
-    data[0].y.push(newData.y1);
-
-    data[1].x.push(elapsedTime);
-    data[1].y.push(newData.y2);
-
-    // Keep only the last `maxPoints` points
-    if (data[0].x.length > maxPoints) {
-        data[0].x.shift();
-        data[0].y.shift();
-        data[1].x.shift();
-        data[1].y.shift();
-    }
-
-    // Update the plot
-    Plotly.react('myDiv', data);
+        Plotly.relayout('graph', update);
+        document.getElementById('data').innerHTML = `Counter: ${counter}`;
+    });
 });

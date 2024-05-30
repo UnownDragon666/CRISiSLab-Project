@@ -1,5 +1,6 @@
 #include <Wire.h>
 #include "SparkFun_LPS28DFW_Arduino_Library.h"
+#include <ArduinoJson.h>
 
 LPS28DFW pressureSensor;
 
@@ -13,17 +14,12 @@ float waterPressure;
 float totalPressure;
 
 void setup() {
-  Serial.begin(115200);
-  Serial.println("LPS28DFW Example 1 - Basic Readings!");
-
+  Serial.begin(9600);
   Wire.begin();
 
   while (pressureSensor.begin(i2cAddress) != LPS28DFW_OK) {
-    Serial.println("Error: LPS28DFW not connected, check wiring and I2C address!");
     delay(1000);
   }
-
-  Serial.println("LPS28DFW connected!");
 }
 
 void loop() {
@@ -32,10 +28,18 @@ void loop() {
   totalPressure = pressureSensor.data.pressure.hpa * 100;
   waterPressure = totalPressure - airPressure;
   waterHeight = waterPressure / (waterDensity * EARTHGRAVITY);
-  Serial.print("\n");
-  Serial.print(pressureSensor.data.pressure.hpa);
-  Serial.print("\n");
-  Serial.print(waterHeight);
-  
-  delay(500);
+
+  // Create a JSON document
+  StaticJsonDocument<200> doc;
+  doc["pressure_hpa"] = pressureSensor.data.pressure.hpa;
+  doc["water_height"] = waterHeight;
+
+  // Serialize JSON to string
+  char jsonBuffer[512];
+  serializeJson(doc, jsonBuffer);
+
+  // Print to serial
+  Serial.println(jsonBuffer);
+
+  delay(1000);
 }

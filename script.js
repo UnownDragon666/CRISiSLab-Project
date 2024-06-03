@@ -1,67 +1,71 @@
-document.addEventListener('DOMContentLoaded', function() {
-    var trace = {
-        x: [],
-        y: [],
-        mode: 'lines+markers',
-        line: {shape: 'linear', color: '#ffffff'},
-        marker: {color: '#00ffff'}
-    };
+const socket = io();
 
-    var layout = {
-        title: 'Sea Themed Linear Animated Graph',
-        xaxis: {
-            range: [0.0, 10.0],
-            title: 'Time (s)',
-            color: '#ffffff',
-            showgrid: true,
-            gridcolor: '#ffffff',
-            zeroline: true,
-            zerolinecolor: '#ffffff'
-        },
-        yaxis: {
-            range: [0, 12],
-            title: 'Water Height',
-            color: '#ffffff',
-            showgrid: true,
-            gridcolor: '#ffffff',
-            zeroline: true,
-            zerolinecolor: '#ffffff'
-        },
-        paper_bgcolor: 'rgba(0, 0, 0, 0.3)',
-        plot_bgcolor: 'rgba(0, 0, 0, 0.3)',
-        font: {
-            color: '#ffffff'
-        }
-    };
+const pressureTrace = {
+    x: [],
+    y: [],
+    mode: 'lines',
+    name: 'Pressure (hPa)'
+};
 
-    var data = [trace];
+const waterHeightTrace = {
+    x: [],
+    y: [],
+    mode: 'lines',
+    name: 'Water Height (m)'
+};
 
-    Plotly.newPlot('graph', data, layout);
+const pressureData = [pressureTrace];
+const waterHeightData = [waterHeightTrace];
 
-    var socket = io();
+const pressureLayout = {
+    title: 'Real-time Pressure Data',
+    xaxis: {
+        title: 'Time'
+    },
+    yaxis: {
+        title: 'Pressure (hPa)'
+    }
+};
 
-    socket.on('data', function(msg) {
-        var counter = msg.x;
+const waterHeightLayout = {
+    title: 'Real-time Water Height Data',
+    xaxis: {
+        title: 'Time'
+    },
+    yaxis: {
+        title: 'Water Height (m)'
+    }
+};
 
-        var yValue = counter + 1;
+Plotly.newPlot('pressureGraph', pressureData, pressureLayout);
+Plotly.newPlot('waterHeightGraph', waterHeightData, waterHeightLayout);
 
-        Plotly.extendTraces('graph', {
-            x: [[counter]],
-            y: [[yValue]]
-        }, [0]);
+socket.on('data', (jsonData) => {
+    const time = new Date().toLocaleTimeString();
+    const pressure = jsonData.pressure_hpa;
+    const waterHeight = jsonData.water_height;
 
-        var xRangeStart = Math.max(0, counter - 10);
-        var yRangeStart = Math.max(0, yValue - 10);
-        var update = {
-            xaxis: {
-                range: [xRangeStart, counter]
-            },
-            yaxis: {
-                range: [yRangeStart, yValue + 2]
-            }
-        };
+    Plotly.extendTraces('pressureGraph', {
+        x: [[time]],
+        y: [[pressure]]
+    }, [0]);
 
-        Plotly.relayout('graph', update);
-        document.getElementById('data').innerHTML = `Counter: ${counter}`;
-    });
+    Plotly.extendTraces('waterHeightGraph', {
+        x: [[time]],
+        y: [[waterHeight]]
+    }, [0]);
+
+    const maxPoints = 50;
+    
+    if (pressureTrace.x.length > maxPoints) {
+        pressureTrace.x.shift();
+        pressureTrace.y.shift();
+    }
+
+    if (waterHeightTrace.x.length > maxPoints) {
+        waterHeightTrace.x.shift();
+        waterHeightTrace.y.shift();
+    }
+
+    document.getElementById('data').innerHTML = `Pressure: ${pressure.toFixed(2)} hPa | Water Height: ${waterHeight.toFixed(2)} m`;
 });

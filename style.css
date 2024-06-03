@@ -2,14 +2,15 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
     height: 100vh;
     background: linear-gradient(to bottom, #00c6ff, #0072ff);
     margin: 0;
 }
 
-#graph {
+#pressureGraph, #waterHeightGraph {
     width: 80%;
-    height: 80%;
+    height: 45%;
 }
 
 #data {

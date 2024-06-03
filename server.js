@@ -1,4 +1,3 @@
-
 const express = require('express');
 const http = require('http');
 const socketIo = require('socket.io');
@@ -12,7 +11,7 @@ const io = socketIo(server);
 app.use(express.static('public'));
 
 // Verify the correct serial port path
-const serialPortPath = 'COM3';  // Change this to your serial port path
+const serialPortPath = '/dev/cu.usbmodem21201';  // Change this to your serial port path
 console.log(`Using serial port: ${serialPortPath}`);
 
 const port = new SerialPort({ path: serialPortPath, baudRate: 9600 });

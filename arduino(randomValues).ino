@@ -1,3 +1,5 @@
+/***** This is just for me to use when I am at home and don't have the sensor wiht me. **********/
+
 #include <Wire.h>
 #include <ArduinoJson.h>
 

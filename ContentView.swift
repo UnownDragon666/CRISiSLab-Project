@@ -4,7 +4,6 @@
 //
 //  Created by Tanush Reddy Arra on 06/06/2024.
 //
-
 import SwiftUI
 import SocketIO
 
@@ -12,7 +11,8 @@ struct ContentView: View {
     @State private var pressure: String = "Pressure: N/A"
     @State private var waterHeight: String = "Water Height: N/A"
     
-    let manager = SocketManager(socketURL: URL(string: "http://localhost:3000")!, config: [.log(true), .compress])
+    // Use your MacBook's hostname
+    let manager = SocketManager(socketURL: URL(string: "http://Tanush-Reddys-MacBook-Pro.local:3000")!, config: [.log(true), .compress])
     var socket: SocketIOClient
 
     init() {

@@ -10,31 +10,44 @@ const io = socketIo(server);
 
 app.use(express.static('public'));
 
-// Verify the correct serial port path
-const serialPortPath = '/dev/cu.usbmodem21201';  // Change this to your serial port path
-console.log(`Using serial port: ${serialPortPath}`);
+// Adjust the serial port path to match your Arduino's serial port
+const port = new SerialPort({ path: '/dev/tty.usbmodem21401', baudRate: 9600 });
 
-const port = new SerialPort({ path: serialPortPath, baudRate: 9600 });
+// Error handling for SerialPort
+port.on('error', (err) => {
+    console.error('SerialPort Error:', err);
+});
+
 const parser = port.pipe(new ReadlineParser({ delimiter: '\n' }));
 
 parser.on('data', (data) => {
-    data = data.trim(); // Remove any leading or trailing whitespace
-    console.log(`Received data: ${data}`);
-    
-    // Check if the data is a valid JSON string
-    if (data.startsWith('{') && data.endsWith('}')) {
+    if (isValidJson(data)) {
         try {
             const jsonData = JSON.parse(data);
             io.emit('data', jsonData);
-        } catch (error) {
-            console.error(`Error parsing JSON: ${error}`);
+        } catch (err) {
+            console.error('Error parsing JSON:', err);
         }
     } else {
-        console.error(`Invalid JSON data: ${data}`);
+        console.error('Received invalid JSON:', data);
     }
 });
 
-const PORT = process.env.PORT || 3000;
-server.listen(PORT, () => {
-    console.log(`Listening on port ${PORT}`);
+// Function to check if a string is valid JSON
+function isValidJson(str) {
+    try {
+        JSON.parse(str);
+    } catch (e) {
+        return false;
+    }
+    return true;
+}
+
+// Error handling for the HTTP server
+server.on('error', (err) => {
+    console.error('Server Error:', err);
+});
+
+server.listen(3000, () => {
+    console.log('Server listening on port 3000');
 });

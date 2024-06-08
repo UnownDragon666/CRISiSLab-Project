@@ -3,83 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pressure and Water Height Data</title>
+    <title>Arduino Data Display</title>
     <script src="/socket.io/socket.io.js"></script>
-    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.plot.ly/plotly-2.32.0.min.js"></script>
+    <script src="script.js" defer></script>
 </head>
 <body>
-    <div id="pressureGraph" style="width: 100%; height: 600px;"></div>
-    <div id="waterHeightGraph" style="width: 100%; height: 600px;"></div>
-    <script>
-        const socket = io();
-
-        const pressureTrace = {
-            x: [],
-            y: [],
-            mode: 'lines',
-            name: 'Pressure (hPa)'
-        };
-
-        const waterHeightTrace = {
-            x: [],
-            y: [],
-            mode: 'lines',
-            name: 'Water Height (m)'
-        };
-
-        const pressureData = [pressureTrace];
-        const waterHeightData = [waterHeightTrace];
-
-        const pressureLayout = {
-            title: 'Real-time Pressure Data',
-            xaxis: {
-                title: 'Time'
-            },
-            yaxis: {
-                title: 'Pressure (hPa)'
-            }
-        };
-
-        const waterHeightLayout = {
-            title: 'Real-time Water Height Data',
-            xaxis: {
-                title: 'Time'
-            },
-            yaxis: {
-                title: 'Water Height (m)'
-            }
-        };
-
-        Plotly.newPlot('pressureGraph', pressureData, pressureLayout);
-        Plotly.newPlot('waterHeightGraph', waterHeightData, waterHeightLayout);
-
-        socket.on('data', (jsonData) => {
-            const time = new Date().toLocaleTimeString();
-            const pressure = jsonData.pressure_hpa;
-            const waterHeight = jsonData.water_height;
-
-            Plotly.extendTraces('pressureGraph', {
-                x: [[time]],
-                y: [[pressure]]
-            }, [0]);
-
-            Plotly.extendTraces('waterHeightGraph', {
-                x: [[time]],
-                y: [[waterHeight]]
-            }, [0]);
-
-            const maxPoints = 50;
-            
-            if (pressureTrace.x.length > maxPoints) {
-                pressureTrace.x.shift();
-                pressureTrace.y.shift();
-            }
-
-            if (waterHeightTrace.x.length > maxPoints) {
-                waterHeightTrace.x.shift();
-                waterHeightTrace.y.shift();
-            }
-        });
-    </script>
+    <div id="pressureGraph"></div>
+    <div id="waterHeightGraph"></div>
+    <div id="data"></div>
 </body>
 </html>

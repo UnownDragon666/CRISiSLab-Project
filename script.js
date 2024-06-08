@@ -11,7 +11,7 @@ const waterHeightTrace = {
     x: [],
     y: [],
     mode: 'lines',
-    name: 'Water Height (m)'
+    name: 'Water Height (cm)'
 };
 
 const pressureData = [pressureTrace];
@@ -33,7 +33,7 @@ const waterHeightLayout = {
         title: 'Time'
     },
     yaxis: {
-        title: 'Water Height (m)'
+        title: 'Water Height (cm)'
     }
 };
 
@@ -56,7 +56,7 @@ socket.on('data', (jsonData) => {
     }, [0]);
 
     const maxPoints = 50;
-    
+
     if (pressureTrace.x.length > maxPoints) {
         pressureTrace.x.shift();
         pressureTrace.y.shift();
@@ -67,5 +67,5 @@ socket.on('data', (jsonData) => {
         waterHeightTrace.y.shift();
     }
 
-    document.getElementById('data').innerHTML = `Pressure: ${pressure.toFixed(2)} hPa | Water Height: ${waterHeight.toFixed(2)} m`;
+    document.getElementById('data').innerHTML = `Pressure: ${pressure.toFixed(2)} hPa | Water Height: ${waterHeight.toFixed(2)} cm`;
 });

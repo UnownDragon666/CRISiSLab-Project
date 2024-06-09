@@ -37,6 +37,24 @@ const waterHeightLayout = {
     }
 };
 
+const config = {
+            displayModeBar: true,                // Enable mode bar
+            modeBarButtonsToRemove: [
+                'toImage',                        // Remove "Save as PNG" button
+                'pan2d',                          // Remove pan tool
+                'autoScale2d',                    // Remove autoscale
+                'zoom2d',                         // Remove zoom
+                'zoomIn2d',                       // Remove zoom in
+                'zoomOut2d',                      // Remove zoom out
+                'resetScale2d',                   // Remove reset axes
+                'hoverClosestCartesian',          // Remove closest hover
+                'toggleSpikelines'                // Remove toggle spike lines
+            ],
+            showLink: false,                     // Disable the "Produced with Plotly" link
+            responsive: true,                    // Make the plot responsive
+            displaylogo: false                   // Remove Plotly logo
+        };
+
 Plotly.newPlot('pressureGraph', pressureData, pressureLayout);
 Plotly.newPlot('waterHeightGraph', waterHeightData, waterHeightLayout);
 

@@ -1,20 +1,91 @@
+* {
+    margin: 0;
+    padding: 0;
+    font-family: 'Arimo', sans-serif;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
 body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
     height: 100vh;
     background: linear-gradient(to bottom, #00c6ff, #0072ff);
-    margin: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 25px;
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
+
+#graphs {
+    display: flex;
+    flex-direction: column;
 }
 
 #pressureGraph, #waterHeightGraph {
-    width: 80%;
-    height: 45%;
+    width: 70vw;
+    height: 45vh;
+    margin: 2.5vh 0;
 }
 
-#data {
+.timer {
     color: white;
     font-size: 20px;
-    margin-top: 20px;
+    text-align: right;
+    margin-top: 2.5vh;
+    margin-right: 2.5vh;
+}
+
+.timer h3 {
+    width: 100%;
+    font-size: 26px;
+    letter-spacing: 4px;
+    text-align: center;
+}
+
+.timer--clock {
+    width: 100%;
+    position: relative;
+    padding-left: 6px;
+    margin-top: 22px;
+    overflow: hidden;
+    display: flex;
+    align-items: flex-end;
+}
+
+.timer--clock .number-grp {
+    width: auto;
+    display: block;
+    height: 78px; /* Half the previous height */
+    float: left;
+    overflow: hidden;
+}
+
+.timer--clock .number-grp .number-grp-wrp {
+    width: 100%;
+    position: relative;
+}
+
+.timer--clock .number-grp .number-grp-wrp .num {
+    width: 100%;
+    position: relative;
+    height: 78px;
+}
+
+.timer--clock .number-grp .number-grp-wrp .num p {
+    width: auto;
+    display: table;
+    font-size: 102.5px;
+    line-height: 75px;
+    font-weight: bold;
+}
+
+.timer--clock .cm-unit {
+    font-size: 51.25px;
+    line-height: 75px;
+    margin-left: 10px;
 }

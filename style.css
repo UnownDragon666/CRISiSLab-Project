@@ -60,7 +60,7 @@ body {
 .timer--clock .number-grp {
     width: auto;
     display: block;
-    height: 78px; /* Half the previous height */
+    height: 78px;
     float: left;
     overflow: hidden;
 }

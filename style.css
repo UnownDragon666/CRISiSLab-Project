@@ -14,30 +14,35 @@ body {
     height: 100vh;
     background: linear-gradient(to bottom, #00c6ff, #0072ff);
     display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 25px;
+}
+
+#content {
+    display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    padding: 25px;
-    overflow-x: hidden;
-    overflow-y: hidden;
+    width: 100%;
 }
 
 #graphs {
     display: flex;
     flex-direction: column;
+    width: 70%;
 }
 
 #pressureGraph, #waterHeightGraph {
-    width: 70vw;
+    width: 100%;
     height: 45vh;
-    margin: 2.5vh 0;
+    margin-bottom: 2.5vh;
 }
 
 .timer {
     color: white;
     font-size: 20px;
     text-align: right;
-    margin-top: 2.5vh;
-    margin-right: 2.5vh;
+    margin-left: 2.5vh;
 }
 
 .timer h3 {
@@ -88,4 +93,27 @@ body {
     font-size: 51.25px;
     line-height: 75px;
     margin-left: 10px;
+}
+
+.threshold-input {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.threshold-input input {
+    padding: 10px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    margin-right: 10px;
+}
+
+.threshold-input button {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    background-color: #0072ff;
+    color: white;
+    cursor: pointer;
 }

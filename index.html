@@ -7,44 +7,21 @@
     <script src="/socket.io/socket.io.js"></script>
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.plot.ly/plotly-2.32.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
     <script src="script.js" defer></script>
 </head>
 <body>
-    <div id="pressureGraph"></div>
-    <div id="waterHeightGraph"></div>
-     <div id="data" class="timer">
-        <h3>HIGHEST WATER HEIGHT</h3>
-        <div class="timer--clock">
-            <div class="number-grp">
-                <div class="number-grp-wrp">
-                    <div class="num num-0"><p>0</p></div>
-                    <div class="num num-1"><p>1</p></div>
-                    <div class="num num-2"><p>2</p></div>
-                    <div class="num num-3"><p>3</p></div>
-                    <div class="num num-4"><p>4</p></div>
-                    <div class="num num-5"><p>5</p></div>
-                    <div class="num num-6"><p>6</p></div>
-                    <div class="num num-7"><p>7</p></div>
-                    <div class="num num-8"><p>8</p></div>
-                    <div class="num num-9"><p>9</p></div>
-                </div>
-            </div>
-            <div class="number-grp">
-                <div class="number-grp-wrp">
-                    <div class="num num-0"><p>0</p></div>
-                    <div class="num num-1"><p>1</p></div>
-                    <div class="num num-2"><p>2</p></div>
-                    <div class="num num-3"><p>3</p></div>
-                    <div class="num num-4"><p>4</p></div>
-                    <div class="num num-5"><p>5</p></div>
-                    <div class="num num-6"><p>6</p></div>
-                    <div class="num num-7"><p>7</p></div>
-                    <div class="num num-8"><p>8</p></div>
-                    <div class="num num-9"><p>9</p></div>
-                </div>
-            </div>
-            <div class="cm-unit">
-                <p>mm</p>
+    <div id="content">
+        <div id="graphs">
+            <div id="pressureGraph"></div>
+            <div id="waterHeightGraph"></div>
+        </div>
+        <div id="controls" class="timer">
+            <h3>HIGHEST WATER HEIGHT</h3>
+            <div class="timer--clock"></div>
+            <div class="threshold-input">
+                <input type="number" id="threshold" placeholder="Enter threshold (mm)" />
+                <button id="submitThreshold">Submit</button>
             </div>
         </div>
     </div>

@@ -21,9 +21,11 @@ port.on('error', (err) => {
 const parser = port.pipe(new ReadlineParser({ delimiter: '\n' }));
 
 parser.on('data', (data) => {
+    console.log('Received data:', data); // Logging raw data for troubleshooting
     if (isValidJson(data)) {
         try {
             const jsonData = JSON.parse(data);
+            console.log('Parsed JSON:', jsonData); // Logging parsed JSON for verification
             io.emit('data', jsonData);
         } catch (err) {
             console.error('Error parsing JSON:', err);

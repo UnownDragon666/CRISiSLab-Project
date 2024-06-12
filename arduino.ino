@@ -6,7 +6,7 @@ LPS28DFW pressureSensor;
 
 uint8_t i2cAddress = LPS28DFW_I2C_ADDRESS_DEFAULT;
 
-float airPressure = 1006.20 * 100;
+float airPressure = 1010.589 * 100;
 int waterDensity = 1000;
 float EARTHGRAVITY = 9.81;
 float waterHeight;
@@ -41,5 +41,5 @@ void loop() {
   // Print to serial
   Serial.println(jsonBuffer);
 
-  delay(1000);
+  delay(10);
 }

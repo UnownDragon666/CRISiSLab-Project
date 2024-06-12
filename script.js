@@ -115,7 +115,7 @@ socket.on('data', (jsonData) => {
 
     if (waterHeight > highestWaterHeight && waterHeight > threshold) {
         highestWaterHeight = waterHeight;
-        updateWaterHeightDisplay(highestWaterHeight.toFixed(2));
+        updateWaterHeightDisplay((highestWaterHeight * 10).toFixed(2));
     }
 });
 

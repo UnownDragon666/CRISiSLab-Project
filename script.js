@@ -101,11 +101,16 @@ socket.on('data', (jsonData) => {
         }
     });
 
+    const yMin = Math.min(...waterHeightTrace.y) - 10; // Adding padding
+    const yMax = Math.max(...waterHeightTrace.y) + 10; // Adding padding
+    const yRange = [yMin, yMax];
+
     Plotly.update('waterHeightGraph', {
         x: [waterHeightTrace.x],
         y: [waterHeightTrace.y]
     }, {
-        'xaxis.range': [tenSecondsAgo, currentTime]
+        'xaxis.range': [tenSecondsAgo, currentTime],
+        'yaxis.range': yRange
     }, {
         transition: {
             duration: 200,
@@ -115,27 +120,27 @@ socket.on('data', (jsonData) => {
 
     if (waterHeight > highestWaterHeight && waterHeight > threshold) {
         highestWaterHeight = waterHeight;
-        updateWaterHeightDisplay((highestWaterHeight * 10).toFixed(2));
+        updateWaterHeightDisplay(highestWaterHeight.toFixed(2));
     }
 });
 
 function updateThresholdLine(threshold) {
-    Plotly.relayout('waterHeightGraph', {
-        'shapes': [{
-            type: 'line',
-            x0: 0,
-            x1: 1,
-            y0: threshold,
-            y1: threshold,
-            xref: 'paper',
-            yref: 'y',
-            line: {
-                color: 'red',
-                width: 2,
-                dash: 'dashdot'
-            }
-        }]
-    });
+    const shapes = [{
+        type: 'line',
+        x0: 0,
+        x1: 1,
+        y0: threshold,
+        y1: threshold,
+        xref: 'paper',
+        yref: 'y',
+        line: {
+            color: 'red',
+            width: 2,
+            dash: 'dashdot'
+        }
+    }];
+
+    Plotly.relayout('waterHeightGraph', { shapes });
 }
 
 function updateWaterHeightDisplay(value) {

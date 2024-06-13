@@ -101,8 +101,8 @@ socket.on('data', (jsonData) => {
         }
     });
 
-    const yMin = Math.min(...waterHeightTrace.y) - 10; // Adding padding
-    const yMax = Math.max(...waterHeightTrace.y) + 10; // Adding padding
+    const yMin = Math.min(...waterHeightTrace.y) - 10; 
+    const yMax = Math.max(...waterHeightTrace.y) + 10;
     const yRange = [yMin, yMax];
 
     Plotly.update('waterHeightGraph', {
@@ -118,9 +118,13 @@ socket.on('data', (jsonData) => {
         }
     });
 
-    if (waterHeight > highestWaterHeight && waterHeight > threshold) {
+    if (waterHeight > highestWaterHeight) {
         highestWaterHeight = waterHeight;
         updateWaterHeightDisplay(highestWaterHeight.toFixed(2));
+    }
+
+    if (waterHeight > threshold) {
+        triggerAlarm();
     }
 });
 
@@ -145,7 +149,7 @@ function updateThresholdLine(threshold) {
 
 function updateWaterHeightDisplay(value) {
     const timerClock = document.querySelector('.timer--clock');
-    timerClock.innerHTML = '';  // Clear existing digits
+    timerClock.innerHTML = ''; 
 
     const valueString = value.replace('.', '');
     const digits = valueString.split('');
@@ -179,4 +183,21 @@ function updateWaterHeightDisplay(value) {
     cmUnit.classList.add('cm-unit');
     cmUnit.innerHTML = '<p>mm</p>';
     timerClock.appendChild(cmUnit);
+}
+
+const audioElement = document.getElementById('tsunamiWarningAudio');
+let timeoutId;
+
+function triggerAlarm() {
+    if (!audioElement.paused) return;
+    audioElement.play();
+    timeoutId = setTimeout(() => {
+        stopAudio();
+    }, 10000);
+}
+
+function stopAudio() {
+    audioElement.pause();
+    audioElement.currentTime = 0;
+    clearTimeout(timeoutId);
 }

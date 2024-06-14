@@ -11,7 +11,7 @@ const io = socketIo(server);
 app.use(express.static('public'));
 
 // Adjust the serial port path to match your Arduino's serial port
-const port = new SerialPort({ path: 'COM4', baudRate: 9600 });
+const port = new SerialPort({ path: '/dev/tty.usbmodem21401', baudRate: 9600 });
 
 // Error handling for SerialPort
 port.on('error', (err) => {

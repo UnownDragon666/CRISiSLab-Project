@@ -14,15 +14,21 @@
     <audio id="tsunamiWarningAudio" src="CRISiS Warning Message.mp3" type="audio/mp3"></audio>
     <div id="content">
         <div id="graphs">
-            <div id="pressureGraph"></div>
             <div id="waterHeightGraph"></div>
+            <div id="pressureGraph"></div>
         </div>
         <div id="controls" class="timer">
             <h3>HIGHEST WATER HEIGHT</h3>
             <div class="timer--clock"></div>
             <div class="threshold-input">
+                <h4>Set Threshold</h4>
                 <input type="number" id="threshold" placeholder="Enter threshold (mm)" />
                 <button id="submitThreshold">Submit</button>
+            </div>
+            <div class="standing-water-height-input">
+                <h4>Set Standing Water Height</h4>
+                <input type="number" id="standing-water-height" placeholder="Enter standing-water-height (mm)" />
+                <button id="submitStandingWaterHeight">Submit</button>
             </div>
         </div>
     </div>

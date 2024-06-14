@@ -1,120 +1,124 @@
 * {
-   margin: 0;
-   padding: 0;
-   font-family: 'Arimo', sans-serif;
-   -webkit-touch-callout: none;
-   -webkit-user-select: none;
-   -khtml-user-select: none;
-   -moz-user-select: none;
-   -ms-user-select: none;
-   user-select: none;
+    margin: 0;
+    padding: 0;
+    font-family: 'Arimo', sans-serif;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 body {
-   height: 100vh;
-   background: linear-gradient(to bottom, #00c6ff, #0072ff);
-   display: flex;
-   justify-content: center;
-   align-items: center;
-   padding: 25px;
-   overflow: hidden;
+    height: 100vh;
+    background: linear-gradient(to bottom, #00c6ff, #0072ff);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 25px;
 }
 
 #content {
-   display: flex;
-   justify-content: space-between;
-   align-items: flex-start;
-   width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    width: 100%;
 }
 
 #graphs {
-   display: flex;
-   flex-direction: column;
-   width: 70%;
+    display: flex;
+    flex-direction: column;
+    width: 70%;
 }
 
 #pressureGraph, #waterHeightGraph {
-   width: 100%;
-   height: 45vh;
-   margin-bottom: 2.5vh;
+    width: 100%;
+    height: 45vh;
+    margin-bottom: 2.5vh;
 }
 
 .timer {
-   color: white;
-   font-size: 20px;
-   text-align: right;
-   margin-left: 2.5vh;
+    color: white;
+    font-size: 20px;
+    text-align: right;
+    margin-left: 2.5vh;
 }
 
 .timer h3 {
-   width: 100%;
-   font-size: 26px;
-   letter-spacing: 4px;
-   text-align: center;
+    width: 100%;
+    font-size: 26px;
+    letter-spacing: 4px;
+    text-align: center;
 }
 
 .timer--clock {
-   width: 100%;
-   position: relative;
-   padding-left: 6px;
-   margin-top: 22px;
-   overflow: hidden;
-   display: flex;
-   align-items: flex-end;
+    width: 100%;
+    position: relative;
+    padding-left: 6px;
+    margin-top: 22px;
+    overflow: hidden;
+    display: flex;
+    align-items: flex-end;
 }
 
 .timer--clock .number-grp {
-   width: auto;
-   display: block;
-   height: 78px;
-   float: left;
-   overflow: hidden;
+    width: auto;
+    display: block;
+    height: 78px;
+    float: left;
+    overflow: hidden;
 }
 
 .timer--clock .number-grp .number-grp-wrp {
-   width: 100%;
-   position: relative;
+    width: 100%;
+    position: relative;
 }
 
 .timer--clock .number-grp .number-grp-wrp .num {
-   width: 100%;
-   position: relative;
-   height: 78px;
+    width: 100%;
+    position: relative;
+    height: 78px;
 }
 
 .timer--clock .number-grp .number-grp-wrp .num p {
-   width: auto;
-   display: table;
-   font-size: 102.5px;
-   line-height: 75px;
-   font-weight: bold;
+    width: auto;
+    display: table;
+    font-size: 102.5px;
+    line-height: 75px;
+    font-weight: bold;
 }
 
 .timer--clock .cm-unit {
-   font-size: 51.25px;
-   line-height: 75px;
-   margin-left: 10px;
+    font-size: 51.25px;
+    line-height: 75px;
+    margin-left: 10px;
 }
 
-.threshold-input {
-   margin-top: 20px;
-   text-align: center;
+.threshold-input, .standing-water-height-input {
+    margin-top: 20px;
+    text-align: center;
 }
 
-.threshold-input input {
-   padding: 10px;
-   font-size: 16px;
-   border: none;
-   border-radius: 5px;
-   margin-right: 10px;
+.threshold-input h4, .standing-water-height-input h4 {
+    margin-bottom: 10px;
+    font-size: 18px;
 }
 
-.threshold-input button {
-   padding: 10px 20px;
-   font-size: 16px;
-   border: none;
-   border-radius: 5px;
-   background-color: #0072ff;
-   color: white;
-   cursor: pointer;
+.threshold-input input, .standing-water-height-input input {
+    padding: 10px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    margin-right: 10px;
+}
+
+.threshold-input button, .standing-water-height-input button {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    background-color: #0072ff;
+    color: white;
+    cursor: pointer;
 }

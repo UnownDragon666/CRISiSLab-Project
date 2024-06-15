@@ -6,13 +6,18 @@
 //
 import Foundation
 import SocketIO
+import AVFoundation
 
 class SocketManager: ObservableObject {
     @Published var pressure: String = "Pressure: N/A"
     @Published var waterHeight: String = "Water Height: N/A"
+    @Published var isVibrating: Bool = false
+    
+    var threshold: Double = 0.0
     
     private var manager: SocketIO.SocketManager?
     private var socket: SocketIOClient?
+    private var vibrationTimer: Timer?
     
     func setupSocket(serverURL: String) {
         manager = SocketIO.SocketManager(socketURL: URL(string: serverURL)!, config: [.log(true), .compress])
@@ -33,6 +38,7 @@ class SocketManager: ObservableObject {
                 DispatchQueue.main.async {
                     self?.pressure = String(format: "Pressure: %.2f hPa", pressureValue)
                     self?.waterHeight = String(format: "Water Height: %.2f cm", waterHeightValue)
+                    self?.checkThreshold(waterHeight: waterHeightValue)
                 }
             }
         }
@@ -46,6 +52,29 @@ class SocketManager: ObservableObject {
         }
     }
     
+    private func checkThreshold(waterHeight: Double) {
+        if waterHeight > threshold {
+            startVibrating()
+        } else {
+            stopVibrating()
+        }
+    }
+    
+    private func startVibrating() {
+        if !isVibrating {
+            isVibrating = true
+            vibrationTimer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
+                AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)
+            }
+        }
+    }
+    
+    func stopVibrating() {
+        isVibrating = false
+        vibrationTimer?.invalidate()
+        vibrationTimer = nil
+    }
+    
     func connect() {
         if socket?.status != .connected {
             socket?.connect()
@@ -56,5 +85,6 @@ class SocketManager: ObservableObject {
         if socket?.status == .connected {
             socket?.disconnect()
         }
+        stopVibrating()
     }
 }

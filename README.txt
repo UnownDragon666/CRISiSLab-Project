@@ -13,6 +13,4 @@ Google Docs
 Github
 Arduino IDE
 Pixabay (PowerPoint Images and Videos)
-Homebrew
-Cocoa Pods
 Xcode

@@ -5,10 +5,13 @@
 //  Created by Tanush Reddy Arra on 06/06/2024.
 //
 import SwiftUI
+import AVFoundation
 
 struct ContentView: View {
     @StateObject private var socketManager = SocketManager()
     @State private var serverIP: String = ""
+    @State private var threshold: Double = 0.0
+    @State private var isVibrating: Bool = false
     
     var body: some View {
         VStack {
@@ -25,7 +28,13 @@ struct ContentView: View {
                 .font(.title)
                 .padding()
             
+            TextField("Enter water height threshold", value: $threshold, formatter: NumberFormatter())
+                .padding()
+                .textFieldStyle(RoundedBorderTextFieldStyle())
+                .keyboardType(.decimalPad)
+            
             Button(action: {
+                socketManager.threshold = threshold
                 socketManager.setupSocket(serverURL: "http://\(serverIP):3000")
                 socketManager.connect()
             }) {
@@ -46,8 +55,23 @@ struct ContentView: View {
                     .foregroundColor(.white)
                     .cornerRadius(8)
             }
+            
+            Button(action: {
+                isVibrating = false
+            }) {
+                Text("Stop Vibration")
+                    .padding()
+                    .background(Color.gray)
+                    .foregroundColor(.white)
+                    .cornerRadius(8)
+            }
+            .padding()
+            .disabled(!isVibrating)
         }
         .padding()
+        .onReceive(socketManager.$isVibrating) { vibrating in
+            isVibrating = vibrating
+        }
     }
 }
 

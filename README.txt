@@ -15,5 +15,4 @@ Arduino IDE
 Pixabay (PowerPoint Images and Videos)
 Homebrew
 Cocoa Pods
-Arduino Studio
 Xcode

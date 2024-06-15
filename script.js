@@ -1,12 +1,5 @@
 const socket = io();
 
-const pressureTrace = {
-    x: [],
-    y: [],
-    mode: 'lines',
-    name: 'Pressure (hPa)'
-};
-
 const waterHeightTrace = {
     x: [],
     y: [],
@@ -18,23 +11,11 @@ const waterHeightDifferenceTrace = {
     x: [],
     y: [],
     mode: 'lines',
-    name: 'Water Height Difference (cm)'
+    name: 'Water Height Difference (mm)'
 };
 
-const pressureData = [pressureTrace];
 const waterHeightData = [waterHeightTrace];
 const waterHeightDifferenceData = [waterHeightDifferenceTrace];
-
-const pressureLayout = {
-    title: 'Real-time Pressure Data',
-    xaxis: {
-        title: 'Time',
-        type: 'date'
-    },
-    yaxis: {
-        title: 'Pressure (hPa)'
-    }
-};
 
 const waterHeightLayout = {
     title: 'Real-time Water Height Data',
@@ -55,7 +36,7 @@ const waterHeightDifferenceLayout = {
         type: 'date'
     },
     yaxis: {
-        title: 'Difference (cm)'
+        title: 'Difference (mm)'
     }
 };
 
@@ -69,11 +50,11 @@ const config = {
     displaylogo: false
 };
 
-Plotly.newPlot('pressureGraph', pressureData, pressureLayout, config);
 Plotly.newPlot('waterHeightGraph', waterHeightData, waterHeightLayout, config);
+Plotly.newPlot('standingWaterHeightDifference', waterHeightDifferenceData, waterHeightDifferenceLayout, config);
 
 let highestWaterHeight = 0;
-let threshold = 0;
+let threshold = 999;
 let standingWaterHeight = 0;
 
 document.getElementById('submitThreshold').addEventListener('click', () => {
@@ -87,19 +68,12 @@ document.getElementById('submitStandingWaterHeight').addEventListener('click', (
     const standingWaterHeightInput = document.getElementById('standing-water-height').value;
     standingWaterHeight = parseFloat(standingWaterHeightInput);
     console.log(`Standing water height set to ${standingWaterHeight} mm`);
-
-    // Update the second graph to show water height difference
-    Plotly.newPlot('pressureGraph', waterHeightDifferenceData, waterHeightDifferenceLayout, config);
 });
 
 socket.on('data', (jsonData) => {
     const currentTime = new Date();
-    const pressure = jsonData.pressure_hpa;
     const waterHeight = jsonData.water_height;
-    const waterHeightDifference = standingWaterHeight - waterHeight;
-
-    pressureTrace.x.push(currentTime);
-    pressureTrace.y.push(pressure);
+    const waterHeightDifference = waterHeight - standingWaterHeight;
 
     waterHeightTrace.x.push(currentTime);
     waterHeightTrace.y.push(waterHeight);
@@ -108,8 +82,6 @@ socket.on('data', (jsonData) => {
     waterHeightDifferenceTrace.y.push(waterHeightDifference);
 
     const tenSecondsAgo = new Date(currentTime - 10000);
-    pressureTrace.x = pressureTrace.x.filter(time => time > tenSecondsAgo);
-    pressureTrace.y = pressureTrace.y.slice(-pressureTrace.x.length);
 
     waterHeightTrace.x = waterHeightTrace.x.filter(time => time > tenSecondsAgo);
     waterHeightTrace.y = waterHeightTrace.y.slice(-waterHeightTrace.x.length);
@@ -117,7 +89,7 @@ socket.on('data', (jsonData) => {
     waterHeightDifferenceTrace.x = waterHeightDifferenceTrace.x.filter(time => time > tenSecondsAgo);
     waterHeightDifferenceTrace.y = waterHeightDifferenceTrace.y.slice(-waterHeightDifferenceTrace.x.length);
 
-    Plotly.update('pressureGraph', {
+    Plotly.update('standingWaterHeightDifference', {
         x: [waterHeightDifferenceTrace.x],
         y: [waterHeightDifferenceTrace.y]
     }, {

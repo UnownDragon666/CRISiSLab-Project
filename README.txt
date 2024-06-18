@@ -1,6 +1,6 @@
 CRISiSLab Challenge
 Team members:
-Jayden Tolley-Beales, Macklyn Smith, Tanush Arra, and Idrees Munshi
+Jayden Tolley-Beales, Macklyn Smith, Tanush Arra, and Idress Munshi
 Tsunami Sensor code
 
 

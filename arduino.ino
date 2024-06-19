@@ -27,7 +27,7 @@ void loop() {
 
   totalPressure = pressureSensor.data.pressure.hpa * 100;
   waterPressure = totalPressure - airPressure;
-  waterHeight = waterPressure / (waterDensity * EARTHGRAVITY);
+  waterHeight = waterPressure / (waterDensity * EARTHGRAVITY) * 100; // Convert to cm
 
   // Create a JSON document
   StaticJsonDocument<200> doc;

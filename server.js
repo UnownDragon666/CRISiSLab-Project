@@ -10,10 +10,8 @@ const io = socketIo(server);
 
 app.use(express.static('public'));
 
-// Adjust the serial port path to match your Arduino's serial port
 const port = new SerialPort({ path: '/dev/tty.usbmodem21401', baudRate: 9600 });
 
-// Error handling for SerialPort
 port.on('error', (err) => {
     console.error('SerialPort Error:', err);
 });
@@ -21,11 +19,11 @@ port.on('error', (err) => {
 const parser = port.pipe(new ReadlineParser({ delimiter: '\n' }));
 
 parser.on('data', (data) => {
-    console.log('Received data:', data); // Logging raw data for troubleshooting
+    console.log('Received data:', data);
     if (isValidJson(data)) {
         try {
             const jsonData = JSON.parse(data);
-            console.log('Parsed JSON:', jsonData); // Logging parsed JSON for verification
+            console.log('Parsed JSON:', jsonData);
             io.emit('data', jsonData);
         } catch (err) {
             console.error('Error parsing JSON:', err);
@@ -35,7 +33,6 @@ parser.on('data', (data) => {
     }
 });
 
-// Function to check if a string is valid JSON
 function isValidJson(str) {
     try {
         JSON.parse(str);
@@ -45,9 +42,15 @@ function isValidJson(str) {
     return true;
 }
 
-// Error handling for the HTTP server
 server.on('error', (err) => {
     console.error('Server Error:', err);
+});
+
+io.on('connection', (socket) => {
+    console.log('A client connected:', socket.id);
+    socket.on('disconnect', () => {
+        console.log('Client disconnected:', socket.id);
+    });
 });
 
 server.listen(3000, () => {

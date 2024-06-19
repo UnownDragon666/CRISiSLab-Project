@@ -11,7 +11,7 @@ const waterHeightDifferenceTrace = {
     x: [],
     y: [],
     mode: 'lines',
-    name: 'Water Height Difference (mm)'
+    name: 'Water Height Difference (cm)'
 };
 
 const waterHeightData = [waterHeightTrace];
@@ -36,7 +36,7 @@ const waterHeightDifferenceLayout = {
         type: 'date'
     },
     yaxis: {
-        title: 'Difference (mm)'
+        title: 'Difference (cm)'
     }
 };
 
@@ -60,14 +60,14 @@ let standingWaterHeight = 0;
 document.getElementById('submitThreshold').addEventListener('click', () => {
     const thresholdInput = document.getElementById('threshold').value;
     threshold = parseFloat(thresholdInput);
-    console.log(`Threshold set to ${threshold} mm`);
+    console.log(`Threshold set to ${threshold} cm`);
     updateThresholdLine(threshold);
 });
 
 document.getElementById('submitStandingWaterHeight').addEventListener('click', () => {
     const standingWaterHeightInput = document.getElementById('standing-water-height').value;
     standingWaterHeight = parseFloat(standingWaterHeightInput);
-    console.log(`Standing water height set to ${standingWaterHeight} mm`);
+    console.log(`Standing water height set to ${standingWaterHeight} cm`);
 });
 
 socket.on('data', (jsonData) => {
@@ -139,7 +139,7 @@ function updateThresholdLine(threshold) {
         }
     }];
 
-    Plotly.relayout('waterHeightGraph', { shapes });
+    Plotly.relayout('standingWaterHeightDifference', { shapes });
 }
 
 function updateWaterHeightDisplay(value) {
@@ -176,7 +176,7 @@ function updateWaterHeightDisplay(value) {
 
     const cmUnit = document.createElement('div');
     cmUnit.classList.add('cm-unit');
-    cmUnit.innerHTML = '<p>mm</p>';
+    cmUnit.innerHTML = '<p>cm</p>';
     timerClock.appendChild(cmUnit);
 }
 

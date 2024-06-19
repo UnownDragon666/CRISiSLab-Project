@@ -19,7 +19,7 @@ void loop() {
   waterHeight = random(1, 11) / 100.0; // Convert cm to meters
 
   // Calculate water pressure
-  waterPressure = waterHeight * waterDensity * EARTHGRAVITY;
+  waterPressure = (waterHeight * waterDensity * EARTHGRAVITY) * 100;
   
   // Calculate total pressure
   totalPressure = airPressure + waterPressure;

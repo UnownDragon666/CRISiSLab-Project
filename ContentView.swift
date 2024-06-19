@@ -5,78 +5,159 @@
 //  Created by Tanush Reddy Arra on 06/06/2024.
 //
 import SwiftUI
-import AVFoundation
+import Combine
 
 struct ContentView: View {
-    @StateObject private var socketManager = SocketManager()
+    @StateObject private var viewModel = SocketManagerViewModel(socketManager: SocketManager())
     @State private var serverIP: String = ""
-    @State private var threshold: Double = 0.0
-    @State private var isVibrating: Bool = false
-    
+    @State private var threshold: Double = 10.0
+    @State private var showAlert: Bool = false
+    @State private var showLoading: Bool = false
+    @State private var cancellables = Set<AnyCancellable>()
+
     var body: some View {
         VStack {
-            TextField("Enter server IP", text: $serverIP)
-                .padding()
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-                .keyboardType(.URL)
-                .autocapitalization(.none)
+            serverIPField
             
-            Text(socketManager.pressure)
-                .font(.largeTitle)
-                .padding()
-            Text(socketManager.waterHeight)
-                .font(.title)
-                .padding()
-            
-            TextField("Enter water height threshold", value: $threshold, formatter: NumberFormatter())
-                .padding()
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-                .keyboardType(.decimalPad)
-            
-            Button(action: {
-                socketManager.threshold = threshold
-                socketManager.setupSocket(serverURL: "http://\(serverIP):3000")
-                socketManager.connect()
-            }) {
-                Text("Connect")
-                    .padding()
-                    .background(Color.blue)
-                    .foregroundColor(.white)
-                    .cornerRadius(8)
+            if viewModel.isConnected {
+                disconnectButton
+                thresholdField
+                submitButton
+                dataDisplay
+            } else {
+                connectButton
             }
-            .padding()
-            
-            Button(action: {
-                socketManager.disconnect()
-            }) {
-                Text("Disconnect")
-                    .padding()
-                    .background(Color.red)
-                    .foregroundColor(.white)
-                    .cornerRadius(8)
-            }
-            
-            Button(action: {
-                isVibrating = false
-            }) {
-                Text("Stop Vibration")
-                    .padding()
-                    .background(Color.gray)
-                    .foregroundColor(.white)
-                    .cornerRadius(8)
-            }
-            .padding()
-            .disabled(!isVibrating)
+
+            Spacer()
+            if showLoading { loadingOverlay }
         }
         .padding()
-        .onReceive(socketManager.$isVibrating) { vibrating in
-            isVibrating = vibrating
+        .alert(isPresented: $showAlert) {
+            Alert(
+                title: Text("Tsunami Warning"),
+                message: Text("Evacuate To High Ground Immediately. Avoid Coastal Areas"),
+                dismissButton: .default(Text("OK")) {
+                    viewModel.stopVibrating()
+                }
+            )
+        }
+        .onAppear {
+            bindConnectionState()
         }
     }
-}
+    
+    private var serverIPField: some View {
+        TextField("Enter server IP", text: $serverIP)
+            .padding()
+            .textFieldStyle(RoundedBorderTextFieldStyle())
+            .keyboardType(.URL)
+            .autocapitalization(.none)
+    }
+    
+    private var connectButton: some View {
+        Button(action: connectToServer) {
+            Text("Connect")
+                .padding()
+                .background(Color.blue)
+                .foregroundColor(.white)
+                .cornerRadius(8)
+        }
+        .padding()
+        .disabled(viewModel.isConnected || showLoading)
+    }
+    
+    private var disconnectButton: some View {
+        Button(action: disconnectFromServer) {
+            Text("Disconnect")
+                .padding()
+                .background(Color.red)
+                .foregroundColor(.white)
+                .cornerRadius(8)
+        }
+        .padding()
+    }
+    
+    private var thresholdField: some View {
+        TextField("Enter Threshold", value: $threshold, formatter: NumberFormatter())
+            .padding()
+            .textFieldStyle(RoundedBorderTextFieldStyle())
+            .keyboardType(.decimalPad)
+    }
+    
+    private var submitButton: some View {
+        Button(action: submitThreshold) {
+            Text("Submit")
+                .padding()
+                .background(Color.blue)
+                .foregroundColor(.white)
+                .cornerRadius(8)
+        }
+        .padding()
+    }
+    
+    private var dataDisplay: some View {
+        VStack {
+            Text(viewModel.pressure)
+                .padding()
+            Text(viewModel.waterHeight)
+                .padding()
+        }
+    }
+    
+    private var loadingOverlay: some View {
+        ZStack {
+            Color.white.opacity(0.8)
+                .ignoresSafeArea()
+            VStack {
+                ProgressView()
+                    .progressViewStyle(CircularProgressViewStyle())
+                    .scaleEffect(1.5)
+                    .padding()
+                Text("Connecting...")
+                    .font(.headline)
+            }
+            .padding()
+            .background(RoundedRectangle(cornerRadius: 10).foregroundColor(Color.blue))
+        }
+        .edgesIgnoringSafeArea(.all)
+    }
 
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
+    private func connectToServer() {
+        hideKeyboard()
+        viewModel.threshold = threshold
+        viewModel.setupSocket(serverURL: "http://\(serverIP):3000")
+        viewModel.connect()
+        showLoading = true
+    }
+
+    private func disconnectFromServer() {
+        viewModel.disconnect()
+        showLoading = true
+    }
+
+    private func submitThreshold() {
+        hideKeyboard()
+        // Directly setting the threshold in the view model will handle the alert and vibration logic.
+        viewModel.threshold = threshold
+    }
+
+    private func bindConnectionState() {
+        viewModel.$isConnected
+            .receive(on: RunLoop.main)
+            .sink { connected in
+                showLoading = !connected && viewModel.socketManager.socket?.status == .connecting
+            }
+            .store(in: &cancellables)
+
+        viewModel.$showAlert
+            .receive(on: RunLoop.main)
+            .sink { showAlert in
+                self.showAlert = showAlert
+            }
+            .store(in: &cancellables)
+    }
+
+    private func hideKeyboard() {
+        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
     }
 }

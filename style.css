@@ -12,11 +12,11 @@
 
 body {
     height: 100vh;
-    background: linear-gradient(to bottom, #00c6ff, #0072ff);
+    background: linear-gradient(to bottom, #111, #333);
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 25px;
+    overflow: hidden; /* Prevent scrolling */
 }
 
 #content {
@@ -24,12 +24,15 @@ body {
     justify-content: space-between;
     align-items: flex-start;
     width: 100%;
+    padding: 25px;
+    box-sizing: border-box; /* Ensure padding is included in the width */
 }
 
 #graphs {
     display: flex;
     flex-direction: column;
     width: 70%;
+    margin-right: 2.5%; /* Add margin to create space between graphs and controls */
 }
 
 #waterHeightGraph, #standingWaterHeightDifference {
@@ -38,84 +41,98 @@ body {
     margin-bottom: 2.5vh;
     border-radius: 15px;
     overflow: hidden;
+    background: rgb(42, 42, 42);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .timer {
     color: white;
     font-size: 20px;
-    text-align: right;
-    margin-left: 2.5vh;
+    width: 25%;
+    margin-right: 2.5%; /* Adjust margin for space between controls and edge */
+    box-sizing: border-box;
 }
 
 .timer h3 {
-    width: 100%;
     font-size: 26px;
     letter-spacing: 4px;
     text-align: center;
+    background: rgb(42, 42, 42);
+    border-radius: 15px;
+    padding: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    margin-bottom: 10px; /* Add margin to create space between title and number display */
 }
 
 .timer--clock {
-    width: 100%;
     position: relative;
     padding-left: 6px;
-    margin-top: 22px;
+    margin-top: 10px;
     overflow: hidden;
     display: flex;
-    align-items: flex-end;
+    align-items: center; /* Adjust to center the number vertically */
+    justify-content: center;
+    background: rgb(42, 42, 42);
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    height: 70px; /* Increase height to accommodate taller number display */
 }
 
 .timer--clock .number-grp {
-    width: auto;
     display: block;
-    height: 78px;
+    height: 100px;
     float: left;
     overflow: hidden;
 }
 
-.timer--clock .number-grp .number-grp-wrp {
-    width: 100%;
-    position: relative;
-}
-
 .timer--clock .number-grp .number-grp-wrp .num {
-    width: 100%;
     position: relative;
-    height: 78px;
+    height: 100px;
 }
 
 .timer--clock .number-grp .number-grp-wrp .num p {
-    width: auto;
-    display: table;
-    font-size: 102.5px;
-    line-height: 75px;
+    font-size: 100px; /* Adjust font size */
+    line-height: 100px; /* Adjust line height */
     font-weight: bold;
+    margin: 0;
+    padding: 0;
 }
 
 .timer--clock .cm-unit {
-    font-size: 51.25px;
-    line-height: 75px;
+    font-size: 50px; /* Adjust font size */
+    line-height: 100px; /* Adjust line height */
     margin-left: 10px;
 }
 
-.threshold-input, .standing-water-height-input {
+.controls-box {
     margin-top: 20px;
     text-align: center;
+    background: rgb(42, 42, 42);
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 100%;
 }
 
-.threshold-input h4, .standing-water-height-input h4 {
+.controls-box h4 {
     margin-bottom: 10px;
     font-size: 18px;
 }
 
-.threshold-input input, .standing-water-height-input input {
+.controls-box input {
     padding: 10px;
     font-size: 16px;
     border: none;
     border-radius: 5px;
     margin-right: 10px;
+    width: calc(70% - 22px); /* Adjust width to fit within the box */
+    box-sizing: border-box;
+    display: inline-block;
+    vertical-align: middle;
 }
 
-.threshold-input button, .standing-water-height-input button {
+.controls-box button {
     padding: 10px 20px;
     font-size: 16px;
     border: none;
@@ -123,24 +140,28 @@ body {
     background-color: #0072ff;
     color: white;
     cursor: pointer;
+    display: inline-block;
+    vertical-align: middle;
 }
 
 /* Alert styling */
 #alert {
     position: absolute;
-    bottom: 20px;
-    right: 20px;
+    bottom: 50px;
+    right: 2.5%; /* Adjust to align with input boxes */
     display: flex;
     flex-direction: column;
     align-items: center;
     background-color: grey;
     padding: 20px;
     border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 22%; /* Set width same as the other boxes */
+    height: 160px; /* Increase height for a taller alert */
 }
 
 #alert-icon {
-    font-size: 200px;
+    font-size: 100px;
     color: white;
 }
 

@@ -189,10 +189,31 @@ function triggerAlarm() {
     timeoutId = setTimeout(() => {
         stopAudio();
     }, 10000);
+    displayAlert(true);
 }
 
 function stopAudio() {
     audioElement.pause();
     audioElement.currentTime = 0;
     clearTimeout(timeoutId);
+    displayAlert(false);
+}
+
+function displayAlert(triggered) {
+    const alertElement = document.getElementById('alert');
+    const stopAlertButton = document.getElementById('stopAlertButton');
+
+    if (triggered) {
+        alertElement.style.backgroundColor = 'red';
+        alertElement.classList.add('flashing');
+        stopAlertButton.style.display = 'block';
+    } else {
+        alertElement.style.backgroundColor = 'grey';
+        alertElement.classList.remove('flashing');
+        stopAlertButton.style.display = 'none';
+    }
+}
+
+function stopAlert() {
+    stopAudio();
 }

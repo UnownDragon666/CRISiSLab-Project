@@ -261,3 +261,18 @@ function hideLoadingScreen() {
         loadingScreen.style.display = 'none'; // Hide the loading screen after animation
     });
 }
+
+// JavaScript for Animation
+document.addEventListener('DOMContentLoaded', function () {
+    setTimeout(function () {
+        hideLoadingScreen();
+    }, 3000); // Adjust the delay time as needed (3 seconds in this example)
+});
+
+function hideLoadingScreen() {
+    const loadingScreen = document.querySelector('.loading-screen');
+    loadingScreen.style.opacity = '0'; // Fade out effect
+    loadingScreen.addEventListener('transitionend', function () {
+        loadingScreen.style.display = 'none'; // Hide the loading screen after animation
+    });
+}

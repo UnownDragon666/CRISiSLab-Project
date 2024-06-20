@@ -4,14 +4,22 @@ const waterHeightTrace = {
     x: [],
     y: [],
     mode: 'lines',
-    name: 'Water Height (cm)'
+    name: 'Water Height (cm)',
+    line: {
+        color: '#287afc',
+        width:'4'
+    }
 };
 
 const waterHeightDifferenceTrace = {
     x: [],
     y: [],
     mode: 'lines',
-    name: 'Water Height Difference (cm)'
+    name: 'Water Height Difference (cm)',
+    line: {
+        color: '#287afc',
+        width:'4'
+    }
 };
 
 const waterHeightData = [waterHeightTrace];
@@ -21,10 +29,19 @@ const waterHeightLayout = {
     title: 'Real-time Water Height Data',
     xaxis: {
         title: 'Time',
-        type: 'date'
+        type: 'date',
+        color: 'white',
+        tickcolor: 'white'
     },
     yaxis: {
-        title: 'Water Height (cm)'
+        title: 'Water Height (cm)',
+        color: 'white',
+        tickcolor: 'white'
+    },
+    plot_bgcolor: 'transparent',
+    paper_bgcolor: 'transparent',
+    font: {
+        color: 'white'
     },
     shapes: []
 };
@@ -33,10 +50,19 @@ const waterHeightDifferenceLayout = {
     title: 'Water Height Difference',
     xaxis: {
         title: 'Time',
-        type: 'date'
+        type: 'date',
+        color: 'white',
+        tickcolor: 'white'
     },
     yaxis: {
-        title: 'Difference (cm)'
+        title: 'Difference (cm)',
+        color: 'white',
+        tickcolor: 'white'
+    },
+    plot_bgcolor: 'transparent',
+    paper_bgcolor: 'transparent',
+    font: {
+        color: 'white'
     }
 };
 
@@ -120,7 +146,7 @@ socket.on('data', (jsonData) => {
 
     if (standingWaterHeight != 0) {
         if (waterHeightDifference > threshold) {
-        triggerAlarm();
+            triggerAlarm();
         }
     }
 });

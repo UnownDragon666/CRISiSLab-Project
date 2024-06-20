@@ -162,7 +162,7 @@ body {
 
 #alert-icon {
     font-size: 100px;
-    color: white;
+    color: grey;
 }
 
 #stopAlertButton {
@@ -187,3 +187,38 @@ body {
 .flashing {
     animation: flash 1s infinite;
 }
+
+/* Loading animation */
+.loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #111; /* Dark background */
+    z-index: 1000; /* Ensure it's on top of other content */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 1s ease-out; /* Transition for opacity */
+    opacity: 1; /* Initially visible */
+}
+
+.spinner {
+    border: 6px solid rgba(255, 255, 255, 0.3); /* Adjust border color and width */
+    border-top: 6px solid #fff; /* Adjust spinner color */
+    border-radius: 50%; /* Create a circle */
+    width: 50px; /* Adjust size */
+    height: 50px; /* Adjust size */
+    animation: spin 1s linear infinite; /* Spinning animation */
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg); /* Starting position */
+    }
+    100% {
+        transform: rotate(360deg); /* Full rotation */
+    }
+}
+

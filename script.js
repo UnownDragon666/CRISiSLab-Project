@@ -233,18 +233,15 @@ function displayAlert(triggered) {
     const stopAlertButton = document.getElementById('stopAlertButton');
 
     if (triggered) {
-        alertElement.style.backgroundColor = 'red';
-        alertElement.classList.add('flashing');
-        alertIcon.style.color = 'white'; // Change color to white when alert is triggered
+        alertElement.style.opacity = '1';
+        alertElement.classList.add('pulsating');
         stopAlertButton.style.display = 'block';
     } else {
-        alertElement.style.backgroundColor = 'grey';
-        alertElement.classList.remove('flashing');
-        alertIcon.style.color = 'grey'; // Change color to grey when alert is not triggered
+        alertElement.style.opacity = '0';
+        alertElement.classList.remove('pulsating');
         stopAlertButton.style.display = 'none';
     }
 }
-
 
 function stopAlert() {
     stopAudio();

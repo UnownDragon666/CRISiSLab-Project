@@ -16,7 +16,8 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    overflow: hidden; /* Prevent scrolling */
+    overflow: hidden;
+    position: relative;
 }
 
 #content {
@@ -25,14 +26,14 @@ body {
     align-items: flex-start;
     width: 100%;
     padding: 25px;
-    box-sizing: border-box; /* Ensure padding is included in the width */
+    box-sizing: border-box;
 }
 
 #graphs {
     display: flex;
     flex-direction: column;
     width: 70%;
-    margin-right: 2.5%; /* Add margin to create space between graphs and controls */
+    margin-right: 2.5%;
 }
 
 #waterHeightGraph, #standingWaterHeightDifference {
@@ -49,7 +50,7 @@ body {
     color: white;
     font-size: 20px;
     width: 25%;
-    margin-right: 2.5%; /* Adjust margin for space between controls and edge */
+    margin-right: 2.5%;
     box-sizing: border-box;
 }
 
@@ -61,7 +62,7 @@ body {
     border-radius: 15px;
     padding: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    margin-bottom: 10px; /* Add margin to create space between title and number display */
+    margin-bottom: 10px;
 }
 
 .timer--clock {
@@ -70,13 +71,13 @@ body {
     margin-top: 10px;
     overflow: hidden;
     display: flex;
-    align-items: center; /* Adjust to center the number vertically */
+    align-items: center;
     justify-content: center;
     background: rgb(42, 42, 42);
     border-radius: 15px;
     padding: 20px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    height: 70px; /* Increase height to accommodate taller number display */
+    height: 70px;
 }
 
 .timer--clock .number-grp {
@@ -92,16 +93,16 @@ body {
 }
 
 .timer--clock .number-grp .number-grp-wrp .num p {
-    font-size: 100px; /* Adjust font size */
-    line-height: 100px; /* Adjust line height */
+    font-size: 100px;
+    line-height: 100px;
     font-weight: bold;
     margin: 0;
     padding: 0;
 }
 
 .timer--clock .cm-unit {
-    font-size: 50px; /* Adjust font size */
-    line-height: 100px; /* Adjust line height */
+    font-size: 50px;
+    line-height: 100px;
     margin-left: 10px;
 }
 
@@ -126,7 +127,7 @@ body {
     border: none;
     border-radius: 5px;
     margin-right: 10px;
-    width: calc(70% - 22px); /* Adjust width to fit within the box */
+    width: calc(70% - 22px);
     box-sizing: border-box;
     display: inline-block;
     vertical-align: middle;
@@ -144,81 +145,52 @@ body {
     vertical-align: middle;
 }
 
-/* Alert styling */
 #alert {
     position: absolute;
     bottom: 50px;
-    right: 2.5%; /* Adjust to align with input boxes */
+    right: 2.5%;
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: grey;
+    background-color: rgb(82, 12, 12);
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    width: 22%; /* Set width same as the other boxes */
-    height: 160px; /* Increase height for a taller alert */
+    width: 22%;
+    height: 160px;
+    opacity: 0; /* Hide initially */
+    transition: opacity 0.5s ease; /* Smooth transition for appearance */
 }
 
 #alert-icon {
     font-size: 100px;
-    color: grey;
+    color: yellow;
+    margin-bottom: 20px;
+}
+
+@keyframes alertPulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.2);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+#alert.pulsating #alert-icon {
+    animation: alertPulse 1s infinite;
 }
 
 #stopAlertButton {
-    display: none;
-    margin-top: 10px;
     padding: 10px 20px;
     font-size: 16px;
     border: none;
     border-radius: 5px;
-    background-color: #0072ff;
+    background-color: red;
     color: white;
     cursor: pointer;
+    display: none; /* Hide initially */
 }
-
-/* Add a flashing effect to the alert when triggered */
-@keyframes flash {
-    0% { opacity: 1; }
-    50% { opacity: 0.5; }
-    100% { opacity: 1; }
-}
-
-.flashing {
-    animation: flash 1s infinite;
-}
-
-/* Loading animation */
-.loading-screen {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: #111; /* Dark background */
-    z-index: 1000; /* Ensure it's on top of other content */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transition: opacity 1s ease-out; /* Transition for opacity */
-    opacity: 1; /* Initially visible */
-}
-
-.spinner {
-    border: 6px solid rgba(255, 255, 255, 0.3); /* Adjust border color and width */
-    border-top: 6px solid #fff; /* Adjust spinner color */
-    border-radius: 50%; /* Create a circle */
-    width: 50px; /* Adjust size */
-    height: 50px; /* Adjust size */
-    animation: spin 1s linear infinite; /* Spinning animation */
-}
-
-@keyframes spin {
-    0% {
-        transform: rotate(0deg); /* Starting position */
-    }
-    100% {
-        transform: rotate(360deg); /* Full rotation */
-    }
-}
-

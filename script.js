@@ -118,8 +118,10 @@ socket.on('data', (jsonData) => {
         updateWaterHeightDisplay(highestWaterHeight.toFixed(2));
     }
 
-    if (waterHeight > threshold) {
+    if (standingWaterHeight != 0) {
+        if (waterHeightDifference > threshold) {
         triggerAlarm();
+        }
     }
 });
 

@@ -9,6 +9,7 @@
     <script src="https://cdn.plot.ly/plotly-2.32.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
     <script src="script.js" defer></script>
+    <link rel="icon" type="image/x-icon" href="Logo.jpg">
 </head>
 <body>
     <audio id="tsunamiWarningAudio" src="CRISiS Warning Message.mp3" type="audio/mp3"></audio>
@@ -20,21 +21,21 @@
         <div id="controls" class="timer">
             <h3>HIGHEST WATER HEIGHT</h3>
             <div class="timer--clock"></div>
-            <div class="threshold-input">
+            <div class="controls-box">
                 <h4>Set Threshold</h4>
                 <input type="number" id="threshold" placeholder="Enter threshold (cm)" />
                 <button id="submitThreshold">Submit</button>
             </div>
-            <div class="standing-water-height-input">
+            <div class="controls-box">
                 <h4>Set Standing Water Height</h4>
                 <input type="number" id="standing-water-height" placeholder="Enter standing-water-height (cm)" />
                 <button id="submitStandingWaterHeight">Submit</button>
             </div>
+            <div id="alert">
+                <div id="alert-icon">⚠️</div>
+                <button id="stopAlertButton" onclick="stopAlert()">Stop Alert</button>
+            </div>
         </div>
-    </div>
-    <div id="alert">
-        <div id="alert-icon">⚠️</div>
-        <button id="stopAlertButton" onclick="stopAlert()">Stop Alert</button>
     </div>
 </body>
 </html>

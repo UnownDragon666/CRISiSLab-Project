@@ -229,19 +229,38 @@ function stopAudio() {
 
 function displayAlert(triggered) {
     const alertElement = document.getElementById('alert');
+    const alertIcon = document.getElementById('alert-icon');
     const stopAlertButton = document.getElementById('stopAlertButton');
 
     if (triggered) {
         alertElement.style.backgroundColor = 'red';
         alertElement.classList.add('flashing');
+        alertIcon.style.color = 'white'; // Change color to white when alert is triggered
         stopAlertButton.style.display = 'block';
     } else {
         alertElement.style.backgroundColor = 'grey';
         alertElement.classList.remove('flashing');
+        alertIcon.style.color = 'grey'; // Change color to grey when alert is not triggered
         stopAlertButton.style.display = 'none';
     }
 }
 
+
 function stopAlert() {
     stopAudio();
+}
+
+// Wait for the DOM content to be fully loaded
+document.addEventListener('DOMContentLoaded', function () {
+    setTimeout(function () {
+        hideLoadingScreen();
+    }, 3000); // Adjust the delay time as needed (3 seconds in this example)
+});
+
+function hideLoadingScreen() {
+    const loadingScreen = document.querySelector('.loading-screen');
+    loadingScreen.style.opacity = '0'; // Fade out effect
+    loadingScreen.addEventListener('transitionend', function () {
+        loadingScreen.style.display = 'none'; // Hide the loading screen after animation
+    });
 }

@@ -147,6 +147,7 @@ body {
 }
 
 #alert {
+    z-index:99;
     position: absolute;
     bottom: 50px;
     right: 2.5%;
@@ -234,4 +235,28 @@ body {
   
 #content.content-red {
     --gradient-border: conic-gradient(from var(--border-angle), transparent 25%, rgb(255, 0, 0), rgba(0,0,0,0) 99%, transparent);
+}
+
+#allGood {
+    z-index:0;
+    position: absolute;
+    bottom: 50px;
+    right: 2.5%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: rgb(42, 42, 42);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 22%;
+    height: 160px;
+}
+
+#allGood-message {
+    text-align:center;
+    padding-top:20px;
+    font-size: 50px;
+    color: white;
+    margin-bottom: 20px;
 }

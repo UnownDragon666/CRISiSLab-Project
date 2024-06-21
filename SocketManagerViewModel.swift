@@ -27,6 +27,11 @@ class SocketManagerViewModel: ObservableObject {
         set { socketManagerInstance.threshold = newValue }
     }
 
+    var standingWaterHeight: Double {
+        get { socketManagerInstance.standingWaterHeight }
+        set { socketManagerInstance.standingWaterHeight = newValue }
+    }
+
     init(socketManager: SocketManager) {
         self.socketManagerInstance = socketManager
         setupBindings()
@@ -62,11 +67,23 @@ class SocketManagerViewModel: ObservableObject {
             .store(in: &cancellables)
 
         socketManagerInstance.$waterHeight
-            .assign(to: \.waterHeight, on: self)
+            .sink { [weak self] height in
+                self?.waterHeight = height
+                self?.checkAlarmCondition()
+            }
             .store(in: &cancellables)
         
         socketManagerInstance.$showAlert
             .assign(to: \.showAlert, on: self)
             .store(in: &cancellables)
     }
+
+    private func checkAlarmCondition() {
+        guard let waterHeightDouble = Double(waterHeight.replacingOccurrences(of: "Water Height: ", with: "")) else { return }
+        if waterHeightDouble - standingWaterHeight > threshold {
+            showAlert = true
+            // Implement vibration if needed
+        }
+    }
 }
+

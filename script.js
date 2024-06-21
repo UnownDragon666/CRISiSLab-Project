@@ -102,7 +102,7 @@ document.getElementById('submitStandingWaterHeight').addEventListener('click', (
 
 socket.on('data', (jsonData) => {
     const currentTime = new Date();
-    let waterHeight = jsonData.water_height; // No cap value here, we handle it later
+    let waterHeight = jsonData.water_height;
     const waterHeightDifference = waterHeight - standingWaterHeight;
 
     waterHeightTrace.x.push(currentTime);
@@ -119,8 +119,8 @@ socket.on('data', (jsonData) => {
     waterHeightDifferenceTrace.x = waterHeightDifferenceTrace.x.filter(time => time > tenSecondsAgo);
     waterHeightDifferenceTrace.y = waterHeightDifferenceTrace.y.slice(-waterHeightDifferenceTrace.x.length);
 
-    let yMaxWaterHeight = Math.max(20, ...waterHeightTrace.y); // Dynamically adjust y-axis max range
-    let yMaxWaterHeightDifference = Math.max(20, ...waterHeightDifferenceTrace.y); // Dynamically adjust y-axis max range
+    let yMaxWaterHeight = Math.max(20, ...waterHeightTrace.y); 
+    let yMaxWaterHeightDifference = Math.max(20, ...waterHeightDifferenceTrace.y); 
 
     Plotly.update('standingWaterHeightDifference', {
         x: [waterHeightDifferenceTrace.x],
@@ -148,12 +148,13 @@ socket.on('data', (jsonData) => {
         }
     });
 
+    // Correctly handle the highest water height display
     if (jsonData.water_height > highestWaterHeight) {
-        highestWaterHeight = Math.min(jsonData.water_height, 999); // Cap display value at 999 cm
-        updateWaterHeightDisplay(highestWaterHeight.toFixed(0)); // No decimal points
+        highestWaterHeight = Math.min(jsonData.water_height, 999); 
+        updateWaterHeightDisplay(highestWaterHeight); // Pass the whole number
     }
 
-    if (standingWaterHeight != 0) {
+    if (standingWaterHeight !== 0) {
         if (waterHeightDifference > threshold) {
             triggerAlarm();
         }
@@ -183,7 +184,9 @@ function updateWaterHeightDisplay(value) {
     const timerClock = document.querySelector('.timer--clock');
     timerClock.innerHTML = ''; 
 
-    const valueString = value.replace('.', '');
+    // Convert the value to an integer
+    const intValue = Math.floor(value);
+    const valueString = intValue.toString();
     const digits = valueString.split('');
 
     digits.forEach(digit => {
@@ -205,6 +208,7 @@ function updateWaterHeightDisplay(value) {
         digitGroup.appendChild(numberGrpWrp);
         timerClock.appendChild(digitGroup);
 
+        // Correctly set the top offset for animation
         const numElement = numberGrpWrp.querySelector('.num-' + digit);
         const topOffset = -numElement.offsetTop;
 
@@ -255,7 +259,6 @@ function displayAlert(triggered) {
     }
 }
 
-
 function stopAlert() {
     stopAudio();
 }
@@ -275,31 +278,17 @@ function hideLoadingScreen() {
     });
 }
 
-// JavaScript for Animation
-document.addEventListener('DOMContentLoaded', function () {
-    setTimeout(function () {
-        hideLoadingScreen();
-    }, 3000); // Adjust the delay time as needed (3 seconds in this example)
-});
-
-function hideLoadingScreen() {
-    const loadingScreen = document.querySelector('.loading-screen');
-    loadingScreen.style.opacity = '0'; // Fade out effect
-    loadingScreen.addEventListener('transitionend', function () {
-        loadingScreen.style.display = 'none'; // Hide the loading screen after animation
-    });
-}
-
 function animateWaterHeightDisplay() {
     const waterHeightSvg = document.querySelector('.water-height-svg');
     let position = 0;
-
     const speed = 0.1;
+
     function update() {
         position += speed;
         waterHeightSvg.style.transform = `translateY(${position}px)`;
         requestAnimationFrame(update);
     }
+
     update();
 }
 

@@ -221,7 +221,7 @@ body {
   
     border: solid 5px transparent;
     border-radius: 2em;
-    --gradient-border: conic-gradient(from var(--border-angle), transparent 25%, #08f, #f03 99%, transparent);
+    --gradient-border: conic-gradient(from var(--border-angle), transparent 25%, #08f, rgba(0,0,0,0) 99%, transparent);
   
     background: 
       var(--main-bg) padding-box,
@@ -230,5 +230,8 @@ body {
   
     background-position: center center;
     animation: bg-spin 3s linear infinite;
-  }
+}
   
+#content.content-red {
+    --gradient-border: conic-gradient(from var(--border-angle), transparent 25%, rgb(255, 0, 0), rgba(0,0,0,0) 99%, transparent);
+}

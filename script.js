@@ -7,7 +7,7 @@ const waterHeightTrace = {
     name: 'Water Height (cm)',
     line: {
         color: '#287afc',
-        width:'4'
+        width: '4'
     }
 };
 
@@ -18,7 +18,7 @@ const waterHeightDifferenceTrace = {
     name: 'Water Height Difference (cm)',
     line: {
         color: '#287afc',
-        width:'4'
+        width: '4'
     }
 };
 
@@ -31,12 +31,16 @@ const waterHeightLayout = {
         title: 'Time',
         type: 'date',
         color: 'white',
-        tickcolor: 'white'
+        tickcolor: 'white',
+        fixedrange: true // Disable user interaction
     },
     yaxis: {
         title: 'Water Height (cm)',
+        range: [0, 20], // Initial y-axis range
         color: 'white',
-        tickcolor: 'white'
+        tickcolor: 'white',
+        rangemode: 'nonnegative', // Prevent values below 0
+        fixedrange: true // Disable user interaction
     },
     plot_bgcolor: 'transparent',
     paper_bgcolor: 'transparent',
@@ -52,12 +56,16 @@ const waterHeightDifferenceLayout = {
         title: 'Time',
         type: 'date',
         color: 'white',
-        tickcolor: 'white'
+        tickcolor: 'white',
+        fixedrange: true // Disable user interaction
     },
     yaxis: {
         title: 'Difference (cm)',
+        range: [0, 20], // Initial y-axis range
         color: 'white',
-        tickcolor: 'white'
+        tickcolor: 'white',
+        rangemode: 'nonnegative', // Prevent values below 0
+        fixedrange: true // Disable user interaction
     },
     plot_bgcolor: 'transparent',
     paper_bgcolor: 'transparent',
@@ -67,11 +75,7 @@ const waterHeightDifferenceLayout = {
 };
 
 const config = {
-    displayModeBar: true,
-    modeBarButtonsToRemove: [
-        'toImage', 'pan2d', 'autoScale2d', 'zoom2d', 'zoomIn2d', 'zoomOut2d', 'resetScale2d', 'hoverClosestCartesian', 'toggleSpikelines'
-    ],
-    showLink: false,
+    displayModeBar: false, // Hide mode bar
     responsive: true,
     displaylogo: false
 };
@@ -98,7 +102,7 @@ document.getElementById('submitStandingWaterHeight').addEventListener('click', (
 
 socket.on('data', (jsonData) => {
     const currentTime = new Date();
-    const waterHeight = jsonData.water_height;
+    let waterHeight = jsonData.water_height; // No cap value here, we handle it later
     const waterHeightDifference = waterHeight - standingWaterHeight;
 
     waterHeightTrace.x.push(currentTime);
@@ -115,11 +119,15 @@ socket.on('data', (jsonData) => {
     waterHeightDifferenceTrace.x = waterHeightDifferenceTrace.x.filter(time => time > tenSecondsAgo);
     waterHeightDifferenceTrace.y = waterHeightDifferenceTrace.y.slice(-waterHeightDifferenceTrace.x.length);
 
+    let yMaxWaterHeight = Math.max(20, ...waterHeightTrace.y); // Dynamically adjust y-axis max range
+    let yMaxWaterHeightDifference = Math.max(20, ...waterHeightDifferenceTrace.y); // Dynamically adjust y-axis max range
+
     Plotly.update('standingWaterHeightDifference', {
         x: [waterHeightDifferenceTrace.x],
         y: [waterHeightDifferenceTrace.y]
     }, {
-        'xaxis.range': [tenSecondsAgo, currentTime]
+        'xaxis.range': [tenSecondsAgo, currentTime],
+        'yaxis.range': [0, yMaxWaterHeightDifference]
     }, {
         transition: {
             duration: 200,
@@ -131,7 +139,8 @@ socket.on('data', (jsonData) => {
         x: [waterHeightTrace.x],
         y: [waterHeightTrace.y]
     }, {
-        'xaxis.range': [tenSecondsAgo, currentTime]
+        'xaxis.range': [tenSecondsAgo, currentTime],
+        'yaxis.range': [0, yMaxWaterHeight]
     }, {
         transition: {
             duration: 200,
@@ -139,9 +148,9 @@ socket.on('data', (jsonData) => {
         }
     });
 
-    if (waterHeight > highestWaterHeight) {
-        highestWaterHeight = waterHeight;
-        updateWaterHeightDisplay(highestWaterHeight.toFixed(2));
+    if (jsonData.water_height > highestWaterHeight) {
+        highestWaterHeight = Math.min(jsonData.water_height, 999); // Cap display value at 999 cm
+        updateWaterHeightDisplay(highestWaterHeight.toFixed(0)); // No decimal points
     }
 
     if (standingWaterHeight != 0) {
@@ -231,17 +240,21 @@ function displayAlert(triggered) {
     const alertElement = document.getElementById('alert');
     const alertIcon = document.getElementById('alert-icon');
     const stopAlertButton = document.getElementById('stopAlertButton');
+    const contentElement = document.getElementById('content');
 
     if (triggered) {
         alertElement.style.opacity = '1';
         alertElement.classList.add('pulsating');
         stopAlertButton.style.display = 'block';
+        contentElement.classList.add('content-red'); // Correctly add the class
     } else {
         alertElement.style.opacity = '0';
         alertElement.classList.remove('pulsating');
         stopAlertButton.style.display = 'none';
+        contentElement.classList.remove('content-red'); // Correctly remove the class
     }
 }
+
 
 function stopAlert() {
     stopAudio();
@@ -276,3 +289,18 @@ function hideLoadingScreen() {
         loadingScreen.style.display = 'none'; // Hide the loading screen after animation
     });
 }
+
+function animateWaterHeightDisplay() {
+    const waterHeightSvg = document.querySelector('.water-height-svg');
+    let position = 0;
+
+    const speed = 0.1;
+    function update() {
+        position += speed;
+        waterHeightSvg.style.transform = `translateY(${position}px)`;
+        requestAnimationFrame(update);
+    }
+    update();
+}
+
+animateWaterHeightDisplay();

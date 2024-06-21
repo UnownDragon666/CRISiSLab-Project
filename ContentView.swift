@@ -11,6 +11,7 @@ struct ContentView: View {
     @StateObject private var viewModel = SocketManagerViewModel(socketManager: SocketManager())
     @State private var serverIP: String = ""
     @State private var threshold: Double = 10.0
+    @State private var standingWaterHeight: Double = 0.0
     @State private var showAlert: Bool = false
     @State private var showLoading: Bool = false
     @State private var cancellables = Set<AnyCancellable>()
@@ -22,6 +23,7 @@ struct ContentView: View {
             if viewModel.isConnected {
                 disconnectButton
                 thresholdField
+                standingWaterHeightField
                 submitButton
                 dataDisplay
             } else {
@@ -78,14 +80,33 @@ struct ContentView: View {
     }
     
     private var thresholdField: some View {
-        TextField("Enter Threshold", value: $threshold, formatter: NumberFormatter())
-            .padding()
-            .textFieldStyle(RoundedBorderTextFieldStyle())
-            .keyboardType(.decimalPad)
+        VStack(alignment: .leading) {
+            Text("Threshold")
+                .font(.headline)
+                .padding(.bottom, 2)
+            TextField("Enter Threshold", value: $threshold, formatter: NumberFormatter())
+                .padding()
+                .textFieldStyle(RoundedBorderTextFieldStyle())
+                .keyboardType(.decimalPad)
+        }
+        .padding(.vertical)
+    }
+    
+    private var standingWaterHeightField: some View {
+        VStack(alignment: .leading) {
+            Text("Standing Water Height")
+                .font(.headline)
+                .padding(.bottom, 2)
+            TextField("Enter Standing Water Height", value: $standingWaterHeight, formatter: NumberFormatter())
+                .padding()
+                .textFieldStyle(RoundedBorderTextFieldStyle())
+                .keyboardType(.decimalPad)
+        }
+        .padding(.vertical)
     }
     
     private var submitButton: some View {
-        Button(action: submitThreshold) {
+        Button(action: submitValues) {
             Text("Submit")
                 .padding()
                 .background(Color.blue)
@@ -97,8 +118,6 @@ struct ContentView: View {
     
     private var dataDisplay: some View {
         VStack {
-            Text(viewModel.pressure)
-                .padding()
             Text(viewModel.waterHeight)
                 .padding()
         }
@@ -125,6 +144,7 @@ struct ContentView: View {
     private func connectToServer() {
         hideKeyboard()
         viewModel.threshold = threshold
+        viewModel.standingWaterHeight = standingWaterHeight
         viewModel.setupSocket(serverURL: "http://\(serverIP):3000")
         viewModel.connect()
         showLoading = true
@@ -135,10 +155,10 @@ struct ContentView: View {
         showLoading = true
     }
 
-    private func submitThreshold() {
+    private func submitValues() {
         hideKeyboard()
-        // Directly setting the threshold in the view model will handle the alert and vibration logic.
         viewModel.threshold = threshold
+        viewModel.standingWaterHeight = standingWaterHeight
     }
 
     private func bindConnectionState() {

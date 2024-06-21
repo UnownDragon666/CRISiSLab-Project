@@ -15,6 +15,7 @@ class SocketManager: ObservableObject {
     @Published var showAlert: Bool = false
 
     var threshold: Double = 0.0
+    var standingWaterHeight: Double = 0.0
 
     private var manager: SocketIO.SocketManager?
     var socket: SocketIOClient?
@@ -65,7 +66,7 @@ class SocketManager: ObservableObject {
     }
 
     private func checkThreshold(waterHeight: Double) {
-        if waterHeight > threshold {
+        if waterHeight - standingWaterHeight > threshold {
             showAlert = true
             startVibrating()
         }
@@ -98,3 +99,4 @@ class SocketManager: ObservableObject {
         stopVibrating()
     }
 }
+

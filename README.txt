@@ -11,3 +11,4 @@ Microsoft PowerPoint - For making the presentation.
 Google Docs - For making our plan and a place to put our research.
 Github - For uploading our code to the cloud.
 Xcode - For coding our iOS app.
+Code HS - For testing elements of the dashboard before implementing them into our main code.

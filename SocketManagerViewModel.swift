@@ -1,9 +1,3 @@
-//
-//  SocketManagerViewModel.swift
-//  CrisisiOS
-//
-//  Created by Tanush Reddy Arra on 18/06/2024.
-//
 import SwiftUI
 import Foundation
 import Combine
@@ -82,7 +76,6 @@ class SocketManagerViewModel: ObservableObject {
         guard let waterHeightDouble = Double(waterHeight.replacingOccurrences(of: "Water Height: ", with: "")) else { return }
         if waterHeightDouble - standingWaterHeight > threshold {
             showAlert = true
-            // Implement vibration if needed
         }
     }
 }

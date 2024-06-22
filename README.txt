@@ -12,3 +12,6 @@ Google Docs - For making our plan and a place to put our research.
 Github - For uploading our code to the cloud.
 Xcode - For coding our iOS app.
 Code HS - For testing elements of the dashboard before implementing them into our main code.
+Microsoft Copilot - For making the logo.
+Voicemaker - For making the alert sound's talking part.
+Youtube - For finding tutorials and the siren sound.

@@ -25,6 +25,7 @@ void setup() {
 void loop() {
   pressureSensor.getSensorData();
 
+  //Water Height Calculation Math
   totalPressure = pressureSensor.data.pressure.hpa * 100;
   waterPressure = totalPressure - airPressure;
   waterHeight = waterPressure / (waterDensity * EARTHGRAVITY) * 100;

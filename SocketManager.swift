@@ -1,9 +1,3 @@
-//
-//  SocketManager.swift
-//  CrisisiOS
-//
-//  Created by Tanush Reddy Arra on 15/06/2024.
-//
 import SocketIO
 import AVFoundation
 

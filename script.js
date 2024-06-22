@@ -39,7 +39,7 @@ const waterHeightLayout = {
         range: [0, 20], // Initial y-axis range
         color: 'white',
         tickcolor: 'white',
-        rangemode: 'nonnegative', // Prevent values below 0
+        rangemode: 'nonnegative',
         fixedrange: true // Disable user interaction
     },
     plot_bgcolor: 'transparent',
@@ -64,7 +64,7 @@ const waterHeightDifferenceLayout = {
         range: [0, 20], // Initial y-axis range
         color: 'white',
         tickcolor: 'white',
-        rangemode: 'nonnegative', // Prevent values below 0
+        rangemode: 'nonnegative',
         fixedrange: true // Disable user interaction
     },
     plot_bgcolor: 'transparent',
@@ -75,7 +75,7 @@ const waterHeightDifferenceLayout = {
 };
 
 const config = {
-    displayModeBar: false, // Hide mode bar
+    displayModeBar: false, 
     responsive: true,
     displaylogo: false
 };
@@ -148,10 +148,9 @@ socket.on('data', (jsonData) => {
         }
     });
 
-    // Correctly handle the highest water height display
     if (jsonData.water_height > highestWaterHeight) {
         highestWaterHeight = Math.min(jsonData.water_height, 999); 
-        updateWaterHeightDisplay(highestWaterHeight); // Pass the whole number
+        updateWaterHeightDisplay(highestWaterHeight);
     }
 
     if (standingWaterHeight !== 0) {
@@ -184,7 +183,6 @@ function updateWaterHeightDisplay(value) {
     const timerClock = document.querySelector('.timer--clock');
     timerClock.innerHTML = ''; 
 
-    // Convert the value to an integer
     const intValue = Math.floor(value);
     const valueString = intValue.toString();
     const digits = valueString.split('');
@@ -208,7 +206,6 @@ function updateWaterHeightDisplay(value) {
         digitGroup.appendChild(numberGrpWrp);
         timerClock.appendChild(digitGroup);
 
-        // Correctly set the top offset for animation
         const numElement = numberGrpWrp.querySelector('.num-' + digit);
         const topOffset = -numElement.offsetTop;
 
@@ -250,12 +247,12 @@ function displayAlert(triggered) {
         alertElement.style.opacity = '1';
         alertElement.classList.add('pulsating');
         stopAlertButton.style.display = 'block';
-        contentElement.classList.add('content-red'); // Correctly add the class
+        contentElement.classList.add('content-red'); //Changes border animation color to red
     } else {
         alertElement.style.opacity = '0';
         alertElement.classList.remove('pulsating');
         stopAlertButton.style.display = 'none';
-        contentElement.classList.remove('content-red'); // Correctly remove the class
+        contentElement.classList.remove('content-red'); //Changes border animation color to blue
     }
 }
 
@@ -263,18 +260,17 @@ function stopAlert() {
     stopAudio();
 }
 
-// Wait for the DOM content to be fully loaded
 document.addEventListener('DOMContentLoaded', function () {
     setTimeout(function () {
         hideLoadingScreen();
-    }, 3000); // Adjust the delay time as needed (3 seconds in this example)
+    }, 3000);
 });
 
 function hideLoadingScreen() {
     const loadingScreen = document.querySelector('.loading-screen');
-    loadingScreen.style.opacity = '0'; // Fade out effect
+    loadingScreen.style.opacity = '0';
     loadingScreen.addEventListener('transitionend', function () {
-        loadingScreen.style.display = 'none'; // Hide the loading screen after animation
+        loadingScreen.style.display = 'none';
     });
 }
 

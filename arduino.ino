@@ -27,18 +27,15 @@ void loop() {
 
   totalPressure = pressureSensor.data.pressure.hpa * 100;
   waterPressure = totalPressure - airPressure;
-  waterHeight = waterPressure / (waterDensity * EARTHGRAVITY) * 100; // Convert to cm
+  waterHeight = waterPressure / (waterDensity * EARTHGRAVITY) * 100;
 
-  // Create a JSON document
   StaticJsonDocument<200> doc;
   doc["pressure_hpa"] = pressureSensor.data.pressure.hpa;
   doc["water_height"] = waterHeight;
 
-  // Serialize JSON to string
   char jsonBuffer[512];
   serializeJson(doc, jsonBuffer);
 
-  // Print to serial
   Serial.println(jsonBuffer);
 
   delay(10);

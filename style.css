@@ -160,8 +160,8 @@ body {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     width: 22%;
     height: 160px;
-    opacity: 0; /* Hide initially */
-    transition: opacity 0.5s ease; /* Smooth transition for appearance */
+    opacity: 0;
+    transition: opacity 0.5s ease;
 }
 
 #alert-icon {
@@ -194,7 +194,7 @@ body {
     background-color: red;
     color: white;
     cursor: pointer;
-    display: none; /* Hide initially */
+    display: none;
 }
 
 @keyframes bg-spin {
@@ -211,7 +211,7 @@ body {
   
   #content {
     height:99vh;
-    --border-angle: 0turn; /* For animation */
+    --border-angle: 0turn;
     --main-bg: conic-gradient(
       from var(--border-angle),
       #213,
